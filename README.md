@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/banner.svg" alt="Snapt: select, annotate, copy" width="100%">
+<img src=".github/assets/project-banner.svg" alt="Snapt by vkardin" width="100%">
 
 **A fast, lightweight, open-source screenshot tool for Windows, macOS and Linux.**
 
@@ -257,3 +257,16 @@ Snapt is free and has no ads. If it saves you time, you can support development 
 
 Snapt bundles a subset of the [Inter](https://github.com/rsms/inter) typeface,
 licensed under the [SIL Open Font License](assets/fonts/OFL.txt).
+
+<!-- project-family:start -->
+## More tools by vkardin
+
+| Project | Projects |
+| --- | --- |
+| **[Video Glow](https://vkardin.github.io/video-glow/)** | Ambient light around web videos. Soft glow, LED strips and room colour. [GitHub](https://github.com/vkardin/video-glow) |
+| **[Leveler](https://vkardin.github.io/leveler/)** | Even loudness, clearer dialogue, an equalizer and playback speed controls. [GitHub](https://github.com/vkardin/leveler) |
+| **[Video Drift](https://vkardin.github.io/video-drift/)** | Floating video with subtitles, saved playback positions and timestamped notes. [GitHub](https://github.com/vkardin/video-drift) |
+| **[UNI](https://vkardin.github.io/uni-homebot/)** | Your home server in Telegram: apps, monitoring, notifications and a Mini App. [GitHub](https://github.com/vkardin/uni-homebot) |
+
+[github.com/vkardin](https://github.com/vkardin) · Independent tools · open source
+<!-- project-family:end -->
