@@ -1786,11 +1786,7 @@ impl<'u, 'a> Page<'u, 'a> {
         self.ui
             .fill(SkRect::from_xywh(x, y + 12.0, 36.0, 20.0), 10.0, track);
         let knob_x = if on { x + 18.0 } else { x + 2.0 };
-        let knob = if on && enabled {
-            p.on_accent
-        } else {
-            p.text
-        };
+        let knob = if on && enabled { p.on_accent } else { p.text };
         self.ui
             .fill(SkRect::from_xywh(knob_x, y + 14.0, 16.0, 16.0), 8.0, knob);
     }

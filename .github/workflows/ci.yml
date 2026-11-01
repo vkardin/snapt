@@ -52,6 +52,16 @@ jobs:
         run: |
           sudo apt-get install -y python3-dbus python3-gi dbus
           dbus-run-session -- sh -c 'python3 tests/portal-mock.py & sleep 2; cargo test --locked -- --ignored portal'
+      - name: Render snapshot candidates after a failed visual check
+        if: failure() && runner.os == 'Linux'
+        run: SNAPT_UPDATE_SNAPSHOTS=1 cargo test --workspace --locked
+      - name: Upload snapshot candidates for review
+        if: failure() && runner.os == 'Linux'
+        uses: actions/upload-artifact@v7
+        with:
+          name: snapshot-candidates
+          path: tests/snapshots
+          if-no-files-found: error
       - name: Upload failed snapshots
         if: failure()
         uses: actions/upload-artifact@v7
