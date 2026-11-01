@@ -5,6 +5,7 @@ name: Release
 # to only build the installers.
 on:
   push:
+    branches: [main]
     tags: ["v*"]
   workflow_dispatch:
     inputs:
@@ -25,7 +26,42 @@ env:
   CARGO_PACKAGER_VERSION: 0.11.8
 
 jobs:
+  plan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      tag: ${{ steps.release.outputs.tag }}
+      publish: ${{ steps.release.outputs.publish }}
+      build: ${{ steps.release.outputs.build }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          INPUT_TAG: ${{ inputs.tag }}
+        shell: bash
+        run: |
+          version=$(python3 -c 'import tomllib; print(tomllib.load(open("Cargo.toml", "rb"))["package"]["version"])')
+          tag="${INPUT_TAG:-v$version}"
+          if [[ "$GITHUB_REF_TYPE" == tag ]]; then tag="$GITHUB_REF_NAME"; fi
+          test "$tag" = "v$version" || { echo "Tag does not match Cargo.toml"; exit 1; }
+          publish=false
+          build=true
+          if [[ "$GITHUB_EVENT_NAME" == push || -n "$INPUT_TAG" ]]; then
+            if gh release view "$tag" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              build=false
+            else
+              publish=true
+            fi
+          fi
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "publish=$publish" >> "$GITHUB_OUTPUT"
+          echo "build=$build" >> "$GITHUB_OUTPUT"
+
   package:
+    needs: plan
+    if: needs.plan.outputs.build == 'true'
     name: Package (${{ matrix.name }})
     strategy:
       fail-fast: false
@@ -65,6 +101,11 @@ jobs:
             libfuse2t64
       - name: Install cargo-packager
         run: cargo install cargo-packager --locked --version ${{ env.CARGO_PACKAGER_VERSION }}
+      - name: Check formatting and tests
+        if: runner.os == 'Linux'
+        run: |
+          cargo fmt --all --check
+          cargo test --workspace --locked
       - name: Build
         run: cargo build --release --locked --target ${{ matrix.target }}
       - name: Package
@@ -94,8 +135,8 @@ jobs:
 
   release:
     name: Publish release
-    if: startsWith(github.ref, 'refs/tags/v') || inputs.tag != ''
-    needs: package
+    if: needs.plan.outputs.publish == 'true'
+    needs: [plan, package]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -110,15 +151,15 @@ jobs:
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
-          TAG: ${{ inputs.tag || github.ref_name }}
+          TAG: ${{ needs.plan.outputs.tag }}
         run: |
           # 0.x versions and tags like v1.0.0-beta.1 are marked as pre-releases.
           flags=()
           if [[ "$TAG" == v0.* || "$TAG" == *-* ]]; then flags+=(--prerelease); fi
-          # A release drafted in the GitHub UI already exists: attach the installers to it.
+          # Published versions are never replaced by a later workflow run.
           if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            gh release upload "$TAG" dist/* --repo "$GITHUB_REPOSITORY" --clobber
-          else
-            gh release create "$TAG" dist/* --repo "$GITHUB_REPOSITORY" \
-              --target "$GITHUB_SHA" --title "Snapt ${TAG#v}" --notes-file .github/release-notes.md --generate-notes "${flags[@]}"
+            echo "Release $TAG already exists; leaving its files unchanged."
+            exit 0
           fi
+          gh release create "$TAG" dist/* --repo "$GITHUB_REPOSITORY" \
+            --target "$GITHUB_SHA" --title "Snapt ${TAG#v}" --notes-file .github/release-notes.md --generate-notes "${flags[@]}"
