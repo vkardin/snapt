@@ -257,6 +257,7 @@ struct Palette {
     muted: u32,
     accent: u32,
     accent_hover: u32,
+    on_accent: u32,
     accent_text: u32,
     link_hover: u32,
     /// The selected sidebar item and turned-on tiles.
@@ -265,36 +266,38 @@ struct Palette {
 }
 
 const DARK: Palette = Palette {
-    bg: 0x17132B,
-    side: 0x0F0C1D,
-    line: 0x2A2445,
-    control: 0x231D3D,
-    control_hover: 0x30284F,
-    track: 0x3A3358,
-    text: 0xECE9F7,
-    muted: 0xA49DBD,
-    accent: 0x8B5CF6,
-    accent_hover: 0x9D74F8,
-    accent_text: 0xA78BFA,
-    link_hover: 0xC4B5FD,
-    pill: 0x2B2150,
+    bg: 0x0A0A0B,
+    side: 0x131315,
+    line: 0x27272C,
+    control: 0x1C1C20,
+    control_hover: 0x26262A,
+    track: 0x2A2A2E,
+    text: 0xF3F2EF,
+    muted: 0xA2A1AA,
+    accent: 0xF3F2EF,
+    accent_hover: 0xD7D6D2,
+    on_accent: 0x0A0A0B,
+    accent_text: 0xF3F2EF,
+    link_hover: 0xB09BFF,
+    pill: 0x26232F,
     error: 0xF87171,
 };
 
 const LIGHT: Palette = Palette {
-    bg: 0xFFFFFF,
-    side: 0xF6F4FE,
-    line: 0xE6E1F5,
-    control: 0xF1EDFC,
-    control_hover: 0xE5DEFA,
-    track: 0xD6D0E8,
-    text: 0x1C1530,
-    muted: 0x5D5675,
-    accent: 0x7C3AED,
-    accent_hover: 0x6D28D9,
-    accent_text: 0x7C3AED,
-    link_hover: 0x5B21B6,
-    pill: 0xEDE7FD,
+    bg: 0xF6F6F3,
+    side: 0xFFFFFF,
+    line: 0xDFDFDA,
+    control: 0xEFEFEC,
+    control_hover: 0xE2E2DF,
+    track: 0xD5D5D0,
+    text: 0x16161A,
+    muted: 0x62626D,
+    accent: 0x16161A,
+    accent_hover: 0x343438,
+    on_accent: 0xFFFFFF,
+    accent_text: 0x16161A,
+    link_hover: 0x6F52AE,
+    pill: 0xE9E4F2,
     error: 0xDC2626,
 };
 
@@ -1783,7 +1786,7 @@ impl<'u, 'a> Page<'u, 'a> {
         self.ui
             .fill(SkRect::from_xywh(x, y + 12.0, 36.0, 20.0), 10.0, track);
         let knob_x = if on { x + 18.0 } else { x + 2.0 };
-        let knob = if enabled { 0xFFFFFF } else { p.control };
+        let knob = if on && enabled { p.on_accent } else { p.text };
         self.ui
             .fill(SkRect::from_xywh(knob_x, y + 14.0, 16.0, 16.0), 8.0, knob);
     }
@@ -2107,7 +2110,7 @@ impl<'a> Ui<'a> {
             self.fill(SkRect::from_xywh(x + w - 8.0, y, 8.0, H), 0.0, color);
         }
         let tw = font::measure(text, 12.0).0;
-        let ink = if selected { 0xFFFFFF } else { p.text };
+        let ink = if selected { p.on_accent } else { p.text };
         self.label(text, x + (w - tw) / 2.0, y + 7.0, 12.0, ink);
     }
 
@@ -2196,8 +2199,8 @@ impl<'a> Ui<'a> {
             (false, false) => p.control,
             (false, true) => p.control_hover,
         };
-        self.fill(SkRect::from_xywh(x, y, w, H), 7.0, color);
-        let ink = if primary { 0xFFFFFF } else { p.text };
+        self.fill(SkRect::from_xywh(x, y, w, H), H / 2.0, color);
+        let ink = if primary { p.on_accent } else { p.text };
         self.label(text, x + (w - tw) / 2.0, y + 7.0, 12.0, ink);
     }
 

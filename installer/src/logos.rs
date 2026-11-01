@@ -82,33 +82,29 @@ fn fill(pixmap: &mut Pixmap, path: &Path, paint: &Paint, ts: Transform) {
 }
 
 fn snapt(pixmap: &mut Pixmap, x: f32, y: f32, size: f32) {
-    let ts = place(x, y, size, 0.0, 0.0, 1.0);
-    if let Some(bg) = Rect::from_xywh(0.0, 0.0, 1.0, 1.0).and_then(|r| round_rect(r, 0.22)) {
-        let paint = gradient(
-            (0.0, 0.0),
-            (0.0, 1.0),
-            &[(0.0, 0x8B5CF6), (1.0, 0x5B21B6)],
-            1.0,
-        );
-        fill(pixmap, &bg, &paint, ts);
+    let ts = place(x, y, size, 0.0, 0.0, 96.0);
+    if let Some(bg) = Rect::from_xywh(0.0, 0.0, 96.0, 96.0).and_then(|r| round_rect(r, 24.0)) {
+        fill(pixmap, &bg, &solid(0x101013, 1.0), ts);
     }
-    // Four viewfinder corners and a dot, as in icon.rs.
-    let (edge, arm) = (0.24, 0.16);
+    let paint = gradient(
+        (0.0, 0.0),
+        (96.0, 96.0),
+        &[(0.0, 0xFBAD97), (0.5, 0xB09BFF), (1.0, 0x76BFFF)],
+        1.0,
+    );
     let mut p = PathBuilder::new();
     for (sx, sy) in [(1.0, 1.0), (-1.0, 1.0), (1.0, -1.0), (-1.0, -1.0)] {
-        let cx = 0.5 - sx * (0.5 - edge);
-        let cy = 0.5 - sy * (0.5 - edge);
-        p.move_to(cx + sx * arm, cy);
+        let cx = 48.0 - sx * 21.0;
+        let cy = 48.0 - sy * 21.0;
+        p.move_to(cx + sx * 10.0, cy);
         p.line_to(cx, cy);
-        p.line_to(cx, cy + sy * arm);
+        p.line_to(cx, cy + sy * 10.0);
     }
     if let Some(path) = p.finish() {
-        let mut s = stroke(0.07);
-        s.line_join = LineJoin::Miter;
-        pixmap.stroke_path(&path, &solid(0xFFFFFF, 1.0), &s, ts, None);
+        pixmap.stroke_path(&path, &paint, &stroke(5.0), ts, None);
     }
-    if let Some(dot) = PathBuilder::from_circle(0.5, 0.5, 0.07) {
-        fill(pixmap, &dot, &solid(0xFFFFFF, 1.0), ts);
+    if let Some(mark) = Rect::from_xywh(41.0, 41.0, 14.0, 14.0).and_then(|r| round_rect(r, 4.0)) {
+        fill(pixmap, &mark, &paint, ts);
     }
 }
 

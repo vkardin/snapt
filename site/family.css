@@ -97,3 +97,17 @@ body[data-family] .family-settings-heading h2{font-size:22px;margin:0}
 html[data-motion=reduce]{scroll-behavior:auto!important}
 html[data-motion=reduce] *,html[data-motion=reduce] *::before,html[data-motion=reduce] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
 @media(max-width:760px){.family-nav-inner{gap:8px;padding-inline:18px}.family-nav-links{gap:6px 10px}.family-settings-button{margin-left:0}}
+
+/* Focus brand: a neutral canvas with a warm selection accent. */
+body[data-family=snapt]{--family-accent:#b09bff}
+body[data-family=snapt] .hero{background:radial-gradient(ellipse at 85% 50%,#b09bff18,transparent 65%),var(--family-bg)}
+body[data-family=snapt] .demo{background:#0a0a0b;border-color:#27272c}
+body[data-family=snapt] .demo .bar{background:#171719}
+body[data-family=snapt] .demo .bar i{background:#34343a}
+body[data-family=snapt] .demo .desk div{background:#202024}
+body[data-family=snapt] .demo .sel{border-color:#b09bff}
+body[data-family=snapt] .demo .sel b{border-color:#b09bff}
+body[data-family=snapt] .demo .size{background:#b09bff;color:#101013}
+body[data-family=snapt] .demo .tools span{background:#101013}
+body[data-family=snapt] .demo .hint{color:#16161a}
+body[data-family=snapt] .demo .hint kbd{color:#16161a;background:#f3f2ef;border-color:#c8c7c3}
