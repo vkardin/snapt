@@ -1588,7 +1588,11 @@ fn about(page: &mut Page, settings: &Settings, update: &UpdateStatus) {
             t(T::VideoDriftAbout),
             "https://vkardin.github.io/video-drift/",
         ),
-        ("UNI", t(T::UniAbout), "https://vkardin.github.io/uni-homebot/"),
+        (
+            "UNI",
+            t(T::UniAbout),
+            "https://vkardin.github.io/uni-homebot/",
+        ),
     ] {
         if !page.matches(&[name, about]) {
             continue;

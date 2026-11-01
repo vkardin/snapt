@@ -60,7 +60,10 @@ fn gradient(
         SpreadMode::Pad,
         Transform::identity(),
     )
-    .unwrap_or(Shader::SolidColor(color(crate::paint::FOCUS_ACCENT, opacity)));
+    .unwrap_or(Shader::SolidColor(color(
+        crate::paint::FOCUS_ACCENT,
+        opacity,
+    )));
     Paint {
         shader,
         anti_alias: true,
