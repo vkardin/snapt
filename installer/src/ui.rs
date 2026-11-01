@@ -6,7 +6,7 @@ use tiny_skia::{Pixmap, Rect};
 use crate::{
     font,
     logos::{self, Logo},
-    paint::fill_round,
+    paint::{self, fill_round},
     system::Step,
     text::Text,
 };
@@ -17,15 +17,15 @@ const UNINSTALL_HEIGHT: f32 = 236.0;
 const MARGIN: f32 = 28.0;
 const BUTTON_H: f32 = 36.0;
 
-const BG: u32 = 0x1C1C1F;
-const CARD: u32 = 0x232328;
-const CARD_HOVER: u32 = 0x2C2C33;
-const CONTROL: u32 = 0x2E2E35;
-const CONTROL_HOVER: u32 = 0x3A3A43;
-const TEXT: u32 = 0xF4F4F6;
-const MUTED: u32 = 0x9A9AA3;
-const ACCENT: u32 = 0x8B5CF6;
-const ACCENT_HOVER: u32 = 0x9D74F8;
+const BG: u32 = paint::UI_BG;
+const CARD: u32 = paint::UI_CARD;
+const CARD_HOVER: u32 = paint::UI_CONTROL;
+const CONTROL: u32 = paint::UI_CONTROL;
+const CONTROL_HOVER: u32 = paint::UI_CONTROL_HOVER;
+const TEXT: u32 = paint::UI_TEXT;
+const MUTED: u32 = paint::UI_MUTED;
+const ACCENT: u32 = paint::UI_TEXT;
+const ACCENT_HOVER: u32 = 0xD7D6D2;
 const DANGER: u32 = 0xDC2626;
 const DANGER_HOVER: u32 = 0xEF4444;
 const ERROR: u32 = 0xF87171;
@@ -348,7 +348,7 @@ impl Ui<'_> {
         };
         self.fill(x, ty, 34.0, 20.0, 10.0, track);
         let knob = if on { x + 16.0 } else { x + 2.0 };
-        self.fill(knob, ty + 2.0, 16.0, 16.0, 8.0, TEXT);
+        self.fill(knob, ty + 2.0, 16.0, 16.0, 8.0, if on { BG } else { TEXT });
     }
 
     /// A button whose right edge is at `right`; returns its left edge.
@@ -363,8 +363,13 @@ impl Ui<'_> {
             (CONTROL, true) => CONTROL_HOVER,
             (c, _) => c,
         };
-        self.fill(x, y, w, BUTTON_H, 8.0, color);
-        self.label(text, x + (w - tw) / 2.0, y + 10.0, 13.0, TEXT);
+        self.fill(x, y, w, BUTTON_H, BUTTON_H / 2.0, color);
+        let ink = if color == ACCENT || color == ACCENT_HOVER {
+            BG
+        } else {
+            TEXT
+        };
+        self.label(text, x + (w - tw) / 2.0, y + 10.0, 13.0, ink);
         x
     }
 
@@ -372,7 +377,7 @@ impl Ui<'_> {
     fn card(&mut self, id: Id, logo: Logo, name: &str, kind: &str, about: &str, x: f32, w: f32) {
         let (y, h) = (142.0, 120.0);
         let hovered = self.hit(id, x, y, w, h);
-        self.fill(x, y, w, h, 10.0, if hovered { CARD_HOVER } else { CARD });
+        self.fill(x, y, w, h, 16.0, if hovered { CARD_HOVER } else { CARD });
         self.logo(logo, x + 14.0, y + 14.0, 34.0);
         self.label(name, x + 58.0, y + 14.0, 14.0, TEXT);
         self.label(kind, x + 58.0, y + 33.0, 10.5, MUTED);

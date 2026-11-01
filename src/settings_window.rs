@@ -266,18 +266,18 @@ struct Palette {
 }
 
 const DARK: Palette = Palette {
-    bg: 0x0A0A0B,
-    side: 0x131315,
+    bg: crate::paint::UI_BG,
+    side: crate::paint::UI_CARD,
     line: 0x27272C,
-    control: 0x1C1C20,
-    control_hover: 0x26262A,
+    control: crate::paint::UI_CONTROL,
+    control_hover: crate::paint::UI_CONTROL_HOVER,
     track: 0x2A2A2E,
-    text: 0xF3F2EF,
-    muted: 0xA2A1AA,
+    text: crate::paint::UI_TEXT,
+    muted: crate::paint::UI_MUTED,
     accent: 0xF3F2EF,
     accent_hover: 0xD7D6D2,
     on_accent: 0x0A0A0B,
-    accent_text: 0xF3F2EF,
+    accent_text: crate::paint::UI_TEXT,
     link_hover: 0xB09BFF,
     pill: 0x26232F,
     error: 0xF87171,
@@ -1583,6 +1583,12 @@ fn about(page: &mut Page, settings: &Settings, update: &UpdateStatus) {
     for (name, about, url) in [
         ("Leveler", t(T::LevelerAbout), LEVELER),
         ("Video Glow", t(T::VideoGlowAbout), VIDEO_GLOW),
+        (
+            "Video Drift",
+            t(T::VideoDriftAbout),
+            "https://vkardin.github.io/video-drift/",
+        ),
+        ("UNI", t(T::UniAbout), "https://vkardin.github.io/uni-homebot/"),
     ] {
         if !page.matches(&[name, about]) {
             continue;

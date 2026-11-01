@@ -47,6 +47,18 @@ jobs:
             libdbus-1-dev libpipewire-0.3-dev libwayland-dev libegl-dev libgbm-dev clang
       - run: cargo clippy --workspace --all-targets --locked -- -D warnings
       - run: cargo test --workspace --locked
+      - name: Render native installer previews
+        if: runner.os == 'Linux'
+        run: |
+          mkdir -p target/setup-preview
+          SNAPT_SETUP_PREVIEW="$PWD/target/setup-preview" cargo test -p snapt-setup ui::tests::draws_every_page --locked
+      - name: Upload native installer previews
+        if: runner.os == 'Linux'
+        uses: actions/upload-artifact@v7
+        with:
+          name: setup-preview
+          path: target/setup-preview
+          if-no-files-found: error
       - name: Test against a fake desktop portal
         if: runner.os == 'Linux'
         run: |

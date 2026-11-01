@@ -24,7 +24,7 @@ use winit::{
 const DOUBLE_CLICK: Duration = Duration::from_millis(400);
 const ZOOMS: std::ops::RangeInclusive<f64> = 0.1..=5.0;
 /// The thin frame that tells a pin apart from what is really on screen.
-const BORDER: u32 = 0x8B5CF6;
+const BORDER: u32 = crate::paint::FOCUS_ACCENT;
 
 /// What the user asked a pin for.
 pub enum PinAction {
