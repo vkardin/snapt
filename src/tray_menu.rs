@@ -526,7 +526,11 @@ pub fn draw(
                     Hint::None => {}
                     Hint::Keys(keys) => {
                         let w = font::measure(keys, HINT_SIZE).0;
-                        let color = if *accent { p.pal.on_accent } else { p.pal.muted };
+                        let color = if *accent {
+                            p.pal.on_accent
+                        } else {
+                            p.pal.muted
+                        };
                         p.text(
                             keys,
                             right - 10.0 - w,
