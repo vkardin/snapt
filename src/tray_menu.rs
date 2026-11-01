@@ -70,7 +70,7 @@ pub fn glyph_rgba(glyph: Glyph, size: u32, color: u32) -> Vec<u8> {
 }
 
 /// The violet the system menus draw their icons in; it reads on light and dark menus.
-pub const NATIVE_ICON: u32 = 0x8B5CF6;
+pub const NATIVE_ICON: u32 = 0x9A7CCC;
 
 /// The update item: what it says and does, and whether it goes at the top.
 pub struct UpdateRow {
@@ -137,32 +137,35 @@ struct Palette {
     chip: u32,
     accent: u32,
     accent_hover: u32,
+    on_accent: u32,
 }
 
 impl Theme {
     fn palette(self) -> Palette {
         match self {
             Theme::Dark => Palette {
-                bg: 0x17132B,
-                hover: 0x2D2650,
-                text: 0xECE9F7,
-                muted: 0xA49DBD,
-                line: 0x2A2445,
-                icon: 0xA78BFA,
-                chip: 0x231D3D,
-                accent: 0x7C3AED,
-                accent_hover: 0x8B5CF6,
+                bg: 0x0A0A0B,
+                hover: 0x1C1C20,
+                text: 0xF3F2EF,
+                muted: 0xA2A1AA,
+                line: 0x27272C,
+                icon: 0xB09BFF,
+                chip: 0x1C1C20,
+                accent: 0xF3F2EF,
+                accent_hover: 0xD7D6D2,
+                on_accent: 0x0A0A0B,
             },
             Theme::Light => Palette {
-                bg: 0xFFFFFF,
-                hover: 0xF1ECFF,
-                text: 0x1C1530,
-                muted: 0x5D5675,
-                line: 0xECE8F7,
-                icon: 0x7C3AED,
-                chip: 0xF6F4FE,
-                accent: 0x7C3AED,
-                accent_hover: 0x6D28D9,
+                bg: 0xF6F6F3,
+                hover: 0xEFEFEC,
+                text: 0x16161A,
+                muted: 0x62626D,
+                line: 0xDFDFDA,
+                icon: 0x6F52AE,
+                chip: 0xEFEFEC,
+                accent: 0x16161A,
+                accent_hover: 0x343438,
+                on_accent: 0xFFFFFF,
             },
         }
     }
@@ -481,7 +484,7 @@ pub fn draw(
                         if on { p.pal.accent } else { p.pal.chip },
                     );
                     let tw = font::measure(&label, HINT_SIZE).0;
-                    let color = if on { 0xFFFFFF } else { p.pal.text };
+                    let color = if on { p.pal.on_accent } else { p.pal.text };
                     p.text(
                         &label,
                         x + (w - tw) / 2.0,
@@ -513,7 +516,7 @@ pub fn draw(
                     p.fill(rect, 6.0, p.pal.hover);
                 }
                 let (icon, ink, opacity) = match (*accent, enabled) {
-                    (true, _) => (0xFFFFFF, 0xFFFFFF, 1.0),
+                    (true, _) => (p.pal.on_accent, p.pal.on_accent, 1.0),
                     (false, true) => (p.pal.icon, p.pal.text, 1.0),
                     (false, false) => (p.pal.muted, p.pal.muted, 0.6),
                 };
@@ -523,7 +526,7 @@ pub fn draw(
                     Hint::None => {}
                     Hint::Keys(keys) => {
                         let w = font::measure(keys, HINT_SIZE).0;
-                        let color = if *accent { 0xFFFFFF } else { p.pal.muted };
+                        let color = if *accent { p.pal.on_accent } else { p.pal.muted };
                         p.text(
                             keys,
                             right - 10.0 - w,
