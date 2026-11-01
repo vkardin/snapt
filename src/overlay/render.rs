@@ -6,7 +6,7 @@ use tiny_skia::{Pixmap, Rect as SkRect};
 use super::selection::{Handle, Rect};
 use crate::font;
 
-pub const ACCENT: u32 = 0x8B5CF6;
+pub const ACCENT: u32 = 0xB09BFF;
 const WHITE: u32 = 0xFFFFFF;
 /// How much of the original brightness is kept outside the selection.
 const DIM: u32 = 115; // out of 255

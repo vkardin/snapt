@@ -1,12 +1,13 @@
 //! The Snapt icon, drawn in code so the binary needs no image assets.
 //!
-//! It matches `assets/logo.svg`: a violet rounded square with white
+//! It matches `assets/logo.svg`: a dark rounded square with gradient
 //! viewfinder corners and a dot in the middle.
 
 pub const SIZE: u32 = 64;
 
-const TOP: [f32; 3] = [139.0, 92.0, 246.0]; // #8B5CF6
-const BOTTOM: [f32; 3] = [91.0, 33.0, 182.0]; // #5B21B6
+const TOP: [f32; 3] = [251.0, 173.0, 151.0];
+const MIDDLE: [f32; 3] = [176.0, 155.0, 255.0];
+const BOTTOM: [f32; 3] = [118.0, 191.0, 255.0];
 
 /// Renders the icon as RGBA pixels, `SIZE` by `SIZE`.
 pub fn rgba() -> Vec<u8> {
@@ -18,13 +19,19 @@ pub fn rgba() -> Vec<u8> {
             let (u, v) = ((x as f32 + 0.5) / s, (y as f32 + 0.5) / s);
             let aa = 1.0 / s;
 
-            let bg = coverage(rounded_square(u, v, 0.5, 0.22), aa);
+            let bg = coverage(rounded_square(u, v, 0.5, 0.25), aa);
             let mark = coverage(viewfinder(u, v), aa);
 
             let mut rgb = [0.0; 3];
             for (i, c) in rgb.iter_mut().enumerate() {
-                let base = TOP[i] + (BOTTOM[i] - TOP[i]) * v;
-                *c = base + (255.0 - base) * mark;
+                let t = (u + v) * 0.5;
+                let brand = if t < 0.5 {
+                    TOP[i] + (MIDDLE[i] - TOP[i]) * t * 2.0
+                } else {
+                    MIDDLE[i] + (BOTTOM[i] - MIDDLE[i]) * (t - 0.5) * 2.0
+                };
+                let base = if i == 2 { 19.0 } else { 16.0 };
+                *c = base + (brand - base) * mark;
             }
             pixels.extend(rgb.map(|c| c.round() as u8));
             pixels.push((bg * 255.0).round() as u8);
@@ -48,9 +55,9 @@ fn rounded_square(u: f32, v: f32, half: f32, radius: f32) -> f32 {
 
 /// Signed distance to the four corner brackets and the centre dot.
 fn viewfinder(u: f32, v: f32) -> f32 {
-    const EDGE: f32 = 0.24; // distance of the brackets from the icon edge
-    const ARM: f32 = 0.16; // bracket arm length
-    const WIDTH: f32 = 0.035; // half stroke width
+    const EDGE: f32 = 27.0 / 96.0; // distance of the brackets from the icon edge
+    const ARM: f32 = 10.0 / 96.0; // bracket arm length
+    const WIDTH: f32 = 2.5 / 96.0; // half stroke width
 
     // Fold into the top-left quadrant: all four corners are mirror images.
     let (fu, fv) = (0.5 - (u - 0.5).abs(), 0.5 - (v - 0.5).abs());
@@ -58,7 +65,7 @@ fn viewfinder(u: f32, v: f32) -> f32 {
     let vertical = segment(fu, fv, (EDGE, EDGE), (EDGE, EDGE + ARM));
     let brackets = horizontal.min(vertical) - WIDTH;
 
-    let dot = (u - 0.5).hypot(v - 0.5) - 0.07;
+    let dot = rounded_square(u, v, 7.0 / 96.0, 4.0 / 96.0);
     brackets.min(dot)
 }
 
@@ -84,10 +91,14 @@ mod tests {
     }
 
     #[test]
-    fn corners_are_transparent_and_centre_is_white() {
+    fn corners_are_transparent_and_centre_uses_brand_colour() {
         let pixels = rgba();
         assert_eq!(pixel(&pixels, 0, 0)[3], 0);
         assert_eq!(pixel(&pixels, SIZE - 1, SIZE - 1)[3], 0);
-        assert_eq!(pixel(&pixels, SIZE / 2, SIZE / 2), [255, 255, 255, 255]);
+        let centre = pixel(&pixels, SIZE / 2, SIZE / 2);
+        assert_eq!(centre[3], 255);
+        assert!((160..=190).contains(&centre[0]));
+        assert!((150..=170).contains(&centre[1]));
+        assert_eq!(centre[2], 255);
     }
 }
