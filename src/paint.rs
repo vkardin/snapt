@@ -2,6 +2,15 @@
 
 use tiny_skia::{Color, FillRule, Paint, PathBuilder, Pixmap, Rect as SkRect, Transform};
 
+/// Native Focus colours shared by the application and the Windows installer.
+pub const UI_BG: u32 = 0x0A0A0B;
+pub const UI_CARD: u32 = 0x131315;
+pub const UI_CONTROL: u32 = 0x1C1C20;
+pub const UI_CONTROL_HOVER: u32 = 0x26262A;
+pub const UI_TEXT: u32 = 0xF3F2EF;
+pub const UI_MUTED: u32 = 0xA2A1AA;
+pub const FOCUS_ACCENT: u32 = 0xB09BFF;
+
 /// Splits `0xRRGGBB` into bytes.
 pub fn rgb(color: u32) -> [u8; 3] {
     [(color >> 16) as u8, (color >> 8) as u8, color as u8]

@@ -144,10 +144,10 @@ impl Theme {
     fn palette(self) -> Palette {
         match self {
             Theme::Dark => Palette {
-                bg: 0x0A0A0B,
-                hover: 0x1C1C20,
-                text: 0xF3F2EF,
-                muted: 0xA2A1AA,
+                bg: crate::paint::UI_BG,
+                hover: crate::paint::UI_CONTROL,
+                text: crate::paint::UI_TEXT,
+                muted: crate::paint::UI_MUTED,
                 line: 0x27272C,
                 icon: 0xB09BFF,
                 chip: 0x1C1C20,
