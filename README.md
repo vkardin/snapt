@@ -259,6 +259,8 @@ Snapt bundles a subset of the [Inter](https://github.com/rsms/inter) typeface,
 licensed under the [SIL Open Font License](assets/fonts/OFL.txt).
 
 <!-- project-family:start -->
+
+[**vkardin / tools — all projects ↗**](https://vkardin.github.io/video-glow/projects/)
 ## More tools by vkardin
 
 | Project | Projects |
