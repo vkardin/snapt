@@ -1,36 +1,13 @@
-name: Pages
+name: Website moved
 
-# Publishes the website in `site/` to GitHub Pages.
-# Needs Settings → Pages → Source set to "GitHub Actions".
+# The website is now published from vkardin/vkardin.github.io.
+# No automatic Pages deployment is performed by this application repository.
 on:
-  push:
-    branches: [main]
-    paths:
-      - site/**
-      - .github/workflows/pages.yml
   workflow_dispatch:
-
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
-  deploy:
-    name: Deploy
+  website-location:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v4
-        with:
-          path: site
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - run: echo 'Website source and publishing live in vkardin/vkardin.github.io/snapt'
