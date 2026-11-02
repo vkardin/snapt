@@ -260,7 +260,7 @@ licensed under the [SIL Open Font License](assets/fonts/OFL.txt).
 
 <!-- project-family:start -->
 
-[**vkardin / tools — all projects ↗**](https://vkardin.github.io/video-glow/projects/)
+[**vkardin / tools — all projects ↗**](https://vkardin.github.io/)
 ## More tools by vkardin
 
 | Project | Projects |
