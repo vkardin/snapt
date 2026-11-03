@@ -2,7 +2,7 @@
 name = "snapt"
 version = "3.0.1"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.90"
 description = "A fast, lightweight, open-source screenshot tool for Windows, macOS and Linux."
 license = "MIT"
 repository = "https://github.com/vkardin/snapt"

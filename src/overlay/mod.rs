@@ -487,10 +487,12 @@ impl Overlay {
                     }
                     // Copying right away skips the editor, so only a fresh
                     // selection with nothing drawn yet goes straight out.
-                    if copy && creating && screen.canvas.is_empty() {
-                        if let Some(image) = screen.output() {
-                            return Some(Outcome::Copy(image));
-                        }
+                    if copy
+                        && creating
+                        && screen.canvas.is_empty()
+                        && let Some(image) = screen.output()
+                    {
+                        return Some(Outcome::Copy(image));
                     }
                 }
                 screen.update_cursor_icon(&style);

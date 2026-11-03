@@ -657,7 +657,7 @@ impl Painter<'_> {
 /// The app icon as a premultiplied pixmap.
 fn logo() -> Option<Pixmap> {
     let mut data = icon::rgba();
-    for px in data.chunks_exact_mut(4) {
+    for px in data.as_chunks_mut::<4>().0 {
         let a = px[3] as u32;
         for c in &mut px[..3] {
             *c = ((*c as u32 * a + 127) / 255) as u8;
@@ -1241,7 +1241,7 @@ mod window {
                     return;
                 }
             };
-            for (dst, src) in buffer.iter_mut().zip(pixmap.data().chunks_exact(4)) {
+            for (dst, src) in buffer.iter_mut().zip(pixmap.data().as_chunks::<4>().0) {
                 *dst = (src[0] as u32) << 16 | (src[1] as u32) << 8 | src[2] as u32;
             }
             if let Err(err) = buffer.present() {

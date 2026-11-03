@@ -801,7 +801,7 @@ impl SettingsWindow {
                 return;
             }
         };
-        for (dst, src) in buffer.iter_mut().zip(pixmap.data().chunks_exact(4)) {
+        for (dst, src) in buffer.iter_mut().zip(pixmap.data().as_chunks::<4>().0) {
             *dst = (src[0] as u32) << 16 | (src[1] as u32) << 8 | src[2] as u32;
         }
         if let Err(err) = buffer.present() {
@@ -1950,7 +1950,7 @@ impl<'a> Ui<'a> {
     /// The Snapt icon, `size` across.
     fn logo(&mut self, x: f32, y: f32, size: f32) {
         let mut data = icon::rgba();
-        for px in data.chunks_exact_mut(4) {
+        for px in data.as_chunks_mut::<4>().0 {
             let a = px[3] as u16;
             for c in &mut px[..3] {
                 *c = (*c as u16 * a / 255) as u8;

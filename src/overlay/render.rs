@@ -28,7 +28,9 @@ impl Frame {
             // The usual case: one image pixel per window pixel.
             image
                 .as_raw()
-                .chunks_exact(4)
+                .as_chunks::<4>()
+                .0
+                .iter()
                 .map(|p| (p[0] as u32) << 16 | (p[1] as u32) << 8 | p[2] as u32)
                 .collect()
         } else {

@@ -2,7 +2,7 @@
 name = "snapt-setup"
 version = "0.0.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.88"
 description = "The Windows installer and uninstaller for Snapt."
 license = "MIT"
 publish = false
