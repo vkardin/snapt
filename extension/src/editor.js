@@ -139,7 +139,13 @@ async function compose(shot) {
   crop.height = Math.max(1, Math.min(crop.height, full.height - crop.y));
   const canvas = new OffscreenCanvas(crop.width, crop.height);
   const c = canvas.getContext('2d');
-  shot.frames.forEach((f, i) => c.drawImage(bitmaps[i], -crop.x, Math.round(f.y * scale) - crop.y));
+  try {
+    shot.frames.forEach((f, i) => c.drawImage(bitmaps[i], -crop.x, Math.round(f.y * scale) - crop.y));
+  } finally {
+    // Whole-page captures can contain hundreds of full-size bitmaps. Release
+    // their backing pixels before allocating the final ImageData for the editor.
+    for (const bitmap of bitmaps) bitmap.close();
+  }
   return c.getImageData(0, 0, crop.width, crop.height);
 }
 

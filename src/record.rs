@@ -132,6 +132,13 @@ fn record(
             std::thread::sleep(wait);
         }
         let now = Instant::now();
+        let elapsed = (now - start).as_secs() as u32;
+        if elapsed != seconds.swap(elapsed, Ordering::Relaxed) {
+            tick();
+        }
+        if elapsed >= MAX_SECONDS {
+            break;
+        }
         let frame = match monitor.capture_image() {
             Ok(image) => imageops::crop_imm(&image, region.x, region.y, w, h).to_image(),
             Err(err) => {
@@ -147,13 +154,6 @@ fn record(
         }
         // A busy GIF encoder drops frames; the next one just stays longer.
         let _ = frames.try_send((frame, now));
-        let elapsed = (now - start).as_secs() as u32;
-        if elapsed != seconds.swap(elapsed, Ordering::Relaxed) {
-            tick();
-        }
-        if elapsed >= MAX_SECONDS {
-            break;
-        }
     }
     drop(frames);
     let mp4 = mp4.and_then(Mp4::finish);
@@ -175,7 +175,9 @@ fn encode_gif(path: &Path, frames: mpsc::Receiver<(RgbaImage, Instant)>) -> Resu
     let mut encoder = gif::GifEncoder::new_with_speed(BufWriter::new(file), 10);
     encoder.set_repeat(gif::Repeat::Infinite)?;
     let mut held: Option<(RgbaImage, Instant)> = None;
+    let mut last_at = None;
     for (frame, at) in frames {
+        last_at = Some(at);
         match &held {
             Some((last, _)) if *last == frame => continue,
             Some((last, since)) => write_gif_frame(&mut encoder, last.clone(), at - *since)?,
@@ -183,8 +185,9 @@ fn encode_gif(path: &Path, frames: mpsc::Receiver<(RgbaImage, Instant)>) -> Resu
         }
         held = Some((frame, at));
     }
-    if let Some((last, _)) = held {
-        write_gif_frame(&mut encoder, last, Duration::from_secs(1) / FPS)?;
+    if let Some((last, since)) = held {
+        let shown = last_at.unwrap_or(since) - since + Duration::from_secs(1) / FPS;
+        write_gif_frame(&mut encoder, last, shown)?;
     }
     Ok(())
 }
@@ -286,6 +289,11 @@ mod tests {
         send.send((red.clone(), t)).unwrap();
         send.send((red, t + Duration::from_millis(100))).unwrap();
         send.send((blue, t + Duration::from_millis(300))).unwrap();
+        send.send((
+            RgbaImage::from_pixel(4, 4, Rgba([0, 0, 255, 255])),
+            t + Duration::from_millis(900),
+        ))
+        .unwrap();
         drop(send);
         encode_gif(&path, receive).unwrap();
         let decoder = gif::GifDecoder::new(std::io::BufReader::new(File::open(&path).unwrap()));
@@ -295,6 +303,7 @@ mod tests {
         std::fs::remove_file(&path).unwrap();
         assert_eq!(frames.len(), 2);
         assert_eq!(frames[0].delay().numer_denom_ms(), (300, 1));
+        assert_eq!(frames[1].delay().numer_denom_ms(), (700, 1));
     }
 
     #[test]
