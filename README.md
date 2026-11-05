@@ -59,7 +59,8 @@ Planned: Flatpak and code-signed installers.
 Snapt also comes as an extension for Chrome and Firefox: select an area, the
 visible part or the whole scrolling page, annotate it with the same tools, and
 copy or save it. It adds "Save image as PNG / JPG" to every image and an
-Alt+click viewer that zooms down to the pixel grid. See
+Alt+click viewer that zooms down to the pixel grid. Install it from
+[Firefox Add-ons](https://addons.mozilla.org/firefox/addon/snapt-screenshots-images/). See
 [extension/README.md](extension/README.md).
 
 ## Install

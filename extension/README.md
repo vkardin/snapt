@@ -3,6 +3,8 @@
 The browser side of Snapt: a Manifest V3 extension built from one source for
 Chrome (and other Chromium browsers) and Firefox.
 
+**Install:** [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/snapt-screenshots-images/).
+
 - **Screenshots.** From the toolbar button or a shortcut: select an area
   (`Alt+Shift+S`; drag, or click an element to take just it), the visible part
   (`Alt+Shift+V`) or the whole page, scrolled and glued into one image
