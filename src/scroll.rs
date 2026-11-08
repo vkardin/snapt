@@ -315,7 +315,7 @@ impl Scroll {
         let Ok(mut buffer) = self.surface.buffer_mut() else {
             return;
         };
-        for (dst, src) in buffer.iter_mut().zip(pixmap.data().chunks_exact(4)) {
+        for (dst, src) in buffer.iter_mut().zip(pixmap.data().as_chunks::<4>().0) {
             *dst = (src[0] as u32) << 16 | (src[1] as u32) << 8 | src[2] as u32;
         }
         let _ = buffer.present();

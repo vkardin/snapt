@@ -1279,10 +1279,10 @@ impl ApplicationHandler<UserEvent> for App {
                 let _ = proxy.send_event(UserEvent::Redacted(areas));
             });
         }
-        if let Some(text) = overlay.take_copied() {
-            if let Err(err) = self.output.copy_text(&text) {
-                log::error!("{err:#}");
-            }
+        if let Some(text) = overlay.take_copied()
+            && let Err(err) = self.output.copy_text(&text)
+        {
+            log::error!("{err:#}");
         }
         if let Some(outcome) = outcome {
             self.finish_capture(event_loop, outcome);

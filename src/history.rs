@@ -4,6 +4,10 @@
 use std::{
     fs,
     path::{Path, PathBuf},
+    sync::{
+        Arc, Mutex, PoisonError,
+        atomic::{AtomicU64, Ordering},
+    },
 };
 
 use anyhow::{Context, Result};
@@ -41,6 +45,53 @@ pub struct History {
     /// Newest first.
     entries: Vec<Entry>,
     limit: usize,
+    writes: Arc<PendingWrites>,
+}
+
+#[derive(Default)]
+struct PendingWrites {
+    generation: AtomicU64,
+    limit: Mutex<usize>,
+}
+
+impl PendingWrites {
+    fn new(limit: usize) -> Self {
+        Self {
+            generation: AtomicU64::new(0),
+            limit: Mutex::new(limit),
+        }
+    }
+
+    fn save(&self, generation: u64, dir: &Path, path: &Path, shot: &RgbaImage) {
+        // Encoding a large screenshot takes a while, so it happens outside the
+        // lock: clearing or turning off the history never waits for it. The
+        // finished file only takes its real name under the lock, so it cannot
+        // undo a clear or prune that happened meanwhile. The temporary name
+        // does not parse as a time, so the history never lists it.
+        let mut part = path.as_os_str().to_owned();
+        part.push(".part");
+        let part = PathBuf::from(part);
+        let written = fs::create_dir_all(dir)
+            .context("failed to create the history folder")
+            .and_then(|()| {
+                shot.save_with_format(&part, image::ImageFormat::Png)
+                    .with_context(|| format!("failed to write {}", path.display()))
+            });
+        let limit = self.limit.lock().unwrap_or_else(PoisonError::into_inner);
+        let current = self.generation.load(Ordering::Relaxed) == generation && *limit > 0;
+        let result = match written {
+            Ok(()) if current => fs::rename(&part, path)
+                .with_context(|| format!("failed to write {}", path.display())),
+            other => other,
+        };
+        if let Err(err) = result {
+            log::warn!("{err:#}");
+        }
+        let _ = fs::remove_file(&part);
+        if current {
+            prune_dir(dir, *limit);
+        }
+    }
 }
 
 impl History {
@@ -52,6 +103,7 @@ impl History {
             entries: dir.as_deref().map(read_entries).unwrap_or_default(),
             dir,
             limit,
+            writes: Arc::new(PendingWrites::new(limit)),
         };
         history.prune();
         history
@@ -86,20 +138,9 @@ impl History {
         );
         self.entries.truncate(self.limit);
         let shot = shot.clone();
-        let limit = self.limit;
-        std::thread::spawn(move || {
-            let result = fs::create_dir_all(&dir)
-                .context("failed to create the history folder")
-                .and_then(|()| {
-                    shot.save(&path)
-                        .with_context(|| format!("failed to write {}", path.display()))
-                });
-            if let Err(err) = result {
-                log::warn!("{err:#}");
-            }
-            // Pruned only after writing, so a shot still being written is never left behind.
-            prune_dir(&dir, limit);
-        });
+        let writes = Arc::clone(&self.writes);
+        let generation = writes.generation.load(Ordering::Relaxed);
+        std::thread::spawn(move || writes.save(generation, &dir, &path, &shot));
     }
 
     /// Opens the screenshot at `index`, newest first.
@@ -115,12 +156,27 @@ impl History {
 
     /// Forgets every screenshot and deletes the files.
     pub fn clear(&mut self) {
+        let _limit = self
+            .writes
+            .limit
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner);
+        self.writes.generation.fetch_add(1, Ordering::Relaxed);
         for entry in self.entries.drain(..) {
             let _ = fs::remove_file(entry.path);
         }
     }
 
     fn prune(&mut self) {
+        let mut limit = self
+            .writes
+            .limit
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner);
+        *limit = self.limit;
+        if self.limit == 0 {
+            self.writes.generation.fetch_add(1, Ordering::Relaxed);
+        }
         self.entries.truncate(self.limit);
         if let Some(dir) = &self.dir {
             prune_dir(dir, self.limit);
@@ -179,6 +235,7 @@ mod tests {
             dir: Some(dir),
             entries: Vec::new(),
             limit,
+            writes: Arc::new(PendingWrites::new(limit)),
         }
     }
 
@@ -230,6 +287,45 @@ mod tests {
         history.clear();
         assert!(read_entries(&dir).is_empty());
         let _ = fs::remove_dir_all(&dir);
+    }
+
+    #[test]
+    fn cleared_or_disabled_history_rejects_pending_writes() {
+        for disable in [false, true] {
+            let mut history = temp_history(
+                if disable {
+                    "pending-off"
+                } else {
+                    "pending-clear"
+                },
+                2,
+            );
+            let dir = history.dir.clone().unwrap();
+            let path = dir.join("20261025-180409.000.png");
+            let generation = history.writes.generation.load(Ordering::Relaxed);
+            if disable {
+                history.set_limit(0);
+            } else {
+                history.clear();
+            }
+            // Simulate the background writer finally running after the action.
+            history
+                .writes
+                .save(generation, &dir, &path, &RgbaImage::new(2, 2));
+            assert!(!path.exists());
+            assert!(
+                !dir.join("20261025-180409.000.png.part").exists(),
+                "a rejected write must not leave its temporary file behind"
+            );
+            history.set_limit(2);
+            history
+                .writes
+                .save(generation, &dir, &path, &RgbaImage::new(2, 2));
+            assert!(
+                !path.exists(),
+                "re-enabling history must not resurrect old jobs"
+            );
+        }
     }
 
     #[test]

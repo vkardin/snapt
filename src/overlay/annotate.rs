@@ -771,7 +771,7 @@ pub fn flatten(image: &mut image::RgbaImage, shapes: &[Shape], x: f32, y: f32, s
         scale: 1.0,
     };
     draw_all(shapes, &mut layer, transform, Some(&backdrop));
-    for (dst, src) in image.pixels_mut().zip(layer.data().chunks_exact(4)) {
+    for (dst, src) in image.pixels_mut().zip(layer.data().as_chunks::<4>().0) {
         let a = src[3] as u32;
         if a == 0 {
             continue;
