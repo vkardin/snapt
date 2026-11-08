@@ -5,7 +5,7 @@ use std::{
     fs,
     path::{Path, PathBuf},
     sync::{
-        Arc, Mutex,
+        Arc, Mutex, PoisonError,
         atomic::{AtomicU64, Ordering},
     },
 };
@@ -63,22 +63,34 @@ impl PendingWrites {
     }
 
     fn save(&self, generation: u64, dir: &Path, path: &Path, shot: &RgbaImage) {
-        // Clear and pruning share this lock with writes, so they cannot be
-        // undone by a screenshot that was still being encoded.
-        let limit = self.limit.lock().unwrap();
-        if self.generation.load(Ordering::Relaxed) != generation || *limit == 0 {
-            return;
-        }
-        let result = fs::create_dir_all(dir)
+        // Encoding a large screenshot takes a while, so it happens outside the
+        // lock: clearing or turning off the history never waits for it. The
+        // finished file only takes its real name under the lock, so it cannot
+        // undo a clear or prune that happened meanwhile. The temporary name
+        // does not parse as a time, so the history never lists it.
+        let mut part = path.as_os_str().to_owned();
+        part.push(".part");
+        let part = PathBuf::from(part);
+        let written = fs::create_dir_all(dir)
             .context("failed to create the history folder")
             .and_then(|()| {
-                shot.save(path)
+                shot.save_with_format(&part, image::ImageFormat::Png)
                     .with_context(|| format!("failed to write {}", path.display()))
             });
+        let limit = self.limit.lock().unwrap_or_else(PoisonError::into_inner);
+        let current = self.generation.load(Ordering::Relaxed) == generation && *limit > 0;
+        let result = match written {
+            Ok(()) if current => fs::rename(&part, path)
+                .with_context(|| format!("failed to write {}", path.display())),
+            other => other,
+        };
         if let Err(err) = result {
             log::warn!("{err:#}");
         }
-        prune_dir(dir, *limit);
+        let _ = fs::remove_file(&part);
+        if current {
+            prune_dir(dir, *limit);
+        }
     }
 }
 
@@ -144,7 +156,11 @@ impl History {
 
     /// Forgets every screenshot and deletes the files.
     pub fn clear(&mut self) {
-        let _limit = self.writes.limit.lock().unwrap();
+        let _limit = self
+            .writes
+            .limit
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner);
         self.writes.generation.fetch_add(1, Ordering::Relaxed);
         for entry in self.entries.drain(..) {
             let _ = fs::remove_file(entry.path);
@@ -152,7 +168,11 @@ impl History {
     }
 
     fn prune(&mut self) {
-        let mut limit = self.writes.limit.lock().unwrap();
+        let mut limit = self
+            .writes
+            .limit
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner);
         *limit = self.limit;
         if self.limit == 0 {
             self.writes.generation.fetch_add(1, Ordering::Relaxed);
@@ -293,6 +313,10 @@ mod tests {
                 .writes
                 .save(generation, &dir, &path, &RgbaImage::new(2, 2));
             assert!(!path.exists());
+            assert!(
+                !dir.join("20261025-180409.000.png.part").exists(),
+                "a rejected write must not leave its temporary file behind"
+            );
             history.set_limit(2);
             history
                 .writes
