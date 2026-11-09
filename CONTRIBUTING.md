@@ -38,11 +38,10 @@ A failing test saves what it drew and a diff (changed pixels in red) to
 
 ## Website
 
-The website at [vkardin.github.io/snapt](https://vkardin.github.io/snapt/) is a static page
-in [`site/`](site), in English (`index.html`), Russian (`ru/`) and Ukrainian (`uk/`). The pages share
-`style.css` and `app.js`; when you change the text, change all three. Preview it with
-`python3 -m http.server -d site` and open http://localhost:8000. Changes to `site/`
-are published to GitHub Pages when they land on `main`.
+The website at [vkardin.github.io/snapt](https://vkardin.github.io/snapt/) is published from
+[vkardin/vkardin.github.io](https://github.com/vkardin/vkardin.github.io/tree/main/snapt), in English,
+Russian and Ukrainian. Change the website there. [`site/`](site) keeps only the logo and the social
+preview image used by this repository.
 
 ## Packages
 
