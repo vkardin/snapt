@@ -1,200 +1,55 @@
-<div align="center">
+<img src=".github/assets/banner.png" alt="Snapt: a screenshot with one key, then arrows and captions right on top of it" width="100%">
 
-<img src=".github/assets/project-banner.svg" alt="Snapt by vkardin" width="100%">
+Snapt is a screenshot tool for Windows, macOS and Linux. Press PrtSc, select an area, draw an arrow or type a caption, then copy or save it. It is a small native program: no account, no cloud, and nothing leaves your computer.
 
-**A fast, lightweight, open-source screenshot tool for Windows, macOS and Linux.**
+**[Website](https://vkardin.github.io/snapt/)** ([RU](https://vkardin.github.io/snapt/ru/), [UA](https://vkardin.github.io/snapt/uk/)) | **[Download](https://vkardin.github.io/snapt/#download)** | **[Firefox extension](https://addons.mozilla.org/firefox/addon/snapt-screenshots-images/)** | **[Report a bug](https://github.com/vkardin/snapt/issues)**
 
-Press PrtSc, select an area, add an arrow or a caption, then copy it or save it.<br>
-No accounts, no cloud, a few megabytes on disk.
-
-**[Website](https://vkardin.github.io/snapt/) ([RU](https://vkardin.github.io/snapt/ru/), [UA](https://vkardin.github.io/snapt/uk/)) · [Download](https://vkardin.github.io/snapt/#download) · [Firefox](https://addons.mozilla.org/firefox/addon/snapt-screenshots-images/) · [Report a bug](https://github.com/vkardin/snapt/issues)**
-
+[![Release](https://img.shields.io/github/v/release/vkardin/snapt?include_prereleases&label=release&color=9aaaff)](https://github.com/vkardin/snapt/releases)
 [![CI](https://github.com/vkardin/snapt/actions/workflows/ci.yml/badge.svg)](https://github.com/vkardin/snapt/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-8B5CF6.svg)](LICENSE)
-![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-5B21B6.svg)
-[![Release](https://img.shields.io/github/v/release/vkardin/snapt?include_prereleases&color=7C3AED)](https://github.com/vkardin/snapt/releases)
-[![Downloads](https://img.shields.io/github/downloads/vkardin/snapt/total?color=7C3AED)](https://github.com/vkardin/snapt/releases)
-![Rust](https://img.shields.io/badge/made%20with-Rust-B7410E.svg)
+[![License: MIT](https://img.shields.io/badge/license-MIT-9aaaff.svg)](LICENSE)
 
-</div>
+## What it does
 
-## Why Snapt
+- **Captures** an area, a window or the whole screen on any monitor, with a magnifier for pixel-exact edges.
+- **Draws on the shot**: pen, line, arrow, rectangle, ellipse, marker, text and numbered steps. Blur or pixelate what should stay private.
+- **Copies, saves or pins** the result. A pinned screenshot stays on top of other windows while you work.
+- **Reads text** from the selection with the system's own OCR, in English, Russian, Ukrainian and more.
+- **Glues long pages** into one tall image: Snapt scrolls the page by itself.
+- **Records** an area as a GIF, or as an MP4 when [ffmpeg](https://ffmpeg.org) is installed.
+- **Picks colors** from the screen and copies them as HEX or RGB.
 
-- **Fast.** A native Rust binary that starts instantly and sits idle in the tray.
-- **Light.** No Electron, no web view, no runtime to install.
-- **Private.** Shots stay on your machine. Snapt never uploads anything.
-- **Familiar.** If you have used LightShot, you already know how Snapt works.
-
-## Features
-
-- Select an area on any monitor, or a whole window with one click, HiDPI aware, with
-  handles to move and resize it and a magnifier for pixel-exact edges. Nudge it with the
-  arrow keys, or type its exact size, such as `1280x720`.
-- Draw on it: pen, line, arrow, rectangle, ellipse, marker, text and numbered steps, in
-  any color, or one picked from the screen with the eyedropper. Pixelate or blur what should
-  stay private, put what matters in a spotlight that dims the rest, and fill rectangles and
-  ellipses with color. Crop the selection to a smaller area without losing the drawings
-  (off by default; turn it on in the settings, on **Editor**).
-  Click a shape to move it, or delete it with `Delete`.
-- A color picker on its own shortcut (`Ctrl+Alt+C`) or in the tray: a magnifier shows the
-  pixels under the cursor and a click copies the color as HEX or RGB.
-- Copy the text in the selection, recognized by the system's own OCR (English, Russian,
-  Ukrainian and more).
-- Copy it, save it as PNG or JPEG, print it, or search Google Lens for similar images.
-- Pin it on top of all windows to keep it in sight while you work, as in Snipaste.
-- Scrolling screenshots of whole pages: Snapt scrolls the page by itself and glues it into one
-  tall image, or you scroll by hand.
-- Record an area as a GIF, or as an MP4 when [ffmpeg](https://ffmpeg.org) is installed.
-- From the tray: copy the full screen in one click, take a screenshot after 3, 5 or 10
-  seconds, select the last area again, and reopen your recent screenshots, or pin the
-  last one from anywhere with a shortcut of your choice.
-- A settings window with four pages: general options, a shortcut for every action,
-  switches to turn off the features you don't use, and switches to hide editor tools.
-- In English, Russian and Ukrainian, and it updates itself from GitHub Releases.
+It is written in Rust, starts instantly and sits idle in the tray. If you have used LightShot, you already know how Snapt works. The interface is in English, Russian and Ukrainian, and Snapt updates itself from GitHub Releases.
 
 Planned: Flatpak and code-signed installers.
 
-## Browser extension
-
-Snapt also comes as an extension for Chrome and Firefox: select an area, the
-visible part or the whole scrolling page, annotate it with the same tools, and
-copy or save it. It adds "Save image as PNG / JPG" to every image and an
-Alt+click viewer that zooms down to the pixel grid. Install it from
-[Firefox Add-ons](https://addons.mozilla.org/firefox/addon/snapt-screenshots-images/). See
-[extension/README.md](extension/README.md).
-
 ## Install
 
-Download the installer for your system from the
-[website](https://vkardin.github.io/snapt/#download) or the
-[latest release](https://github.com/vkardin/snapt/releases):
-`.exe` or `.msi` for Windows, `.dmg` for macOS, `.deb` or AppImage for Linux.
+Download the installer for your system from the [website](https://vkardin.github.io/snapt/#download) or the [latest release](https://github.com/vkardin/snapt/releases): `.exe` or `.msi` for Windows, `.dmg` for macOS, `.deb` or AppImage for Linux.
 
-Snapt is not code-signed yet. On Windows, click **More info → Run anyway** in the
-SmartScreen prompt. On macOS, open **System Settings → Privacy & Security** after the
-first launch attempt and click **Open Anyway**.
+Snapt is not code-signed yet. On Windows, click **More info → Run anyway** in the SmartScreen prompt. On macOS, open **System Settings → Privacy & Security** after the first launch attempt and click **Open Anyway**.
 
-## Usage
+## How to use
 
-Press **PrtSc** (**Cmd+Shift+9** on macOS) or pick **Take screenshot** in the tray menu.
-For a whole long page, press **Ctrl+Shift+PrtSc** (**Cmd+Shift+0** on macOS) and click the
-browser window; see [scrolling screenshots](#scrolling-screenshots) below.
-The screen freezes, then:
+Press **PrtSc** (**Cmd+Shift+9** on macOS) or pick **Take screenshot** in the tray menu. The screen freezes, then:
 
 | Action | How |
 | --- | --- |
 | Select an area | Drag with the left mouse button |
 | Select a window | Point at it and click |
-| Move or resize it | Drag inside the selection or by its handles |
-| Select the whole screen | `Ctrl+A` |
-| Pick a drawing tool | Click it in the panel, or press `P` pen, `L` line, `A` arrow, `R` rectangle, `E` ellipse, `M` marker, `T` text, `N` numbered step, `B` pixelate, `U` blur, `H` spotlight |
-| Crop the selection | `C`, then drag the new area inside it; drawings stay |
-| Type an exact size | Type digits, `X` and digits again, then `Enter`, e.g. `800x600` (image pixels; `Esc` gives up) |
-| Nudge the selection | Arrow keys move it by a pixel, with `Shift` by 10; with `Alt` they resize it |
-| Filled rectangles and ellipses | `F` switches filling on and off |
-| Move or delete a shape | With no tool picked, drag it, or click it and press `Delete` |
-| Straight lines, squares | Hold `Shift` while drawing |
-| Line width, text size | Mouse wheel |
-| Undo, redo | `Ctrl+Z`, `Ctrl+Y` or `Ctrl+Shift+Z` |
+| Draw | Pick a tool in the panel, or press its key: `A` arrow, `T` text, `R` rectangle, `B` pixelate |
+| Undo, redo | `Ctrl+Z`, `Ctrl+Y` |
 | Copy to clipboard | `Ctrl+C`, `Enter` or double-click the selection |
 | Save to a file | `Ctrl+S` |
-| Print | `Ctrl+P` |
-| Search for similar images | `Ctrl+F` |
-| Copy the text in it | `Ctrl+Shift+C` |
-| Pin it on top of all windows | `F3` |
-| Scrolling screenshot of the selection | `Ctrl+Shift+S`; Snapt scrolls the page itself |
-| Record a video of the area | `Ctrl+Shift+R`; `Enter` stops, `Esc` cancels |
-| Pick a color from the screen | `I`, then click; the HEX code is copied too |
+| Pin on top of all windows | `F3` |
 | Cancel | `Esc` or right-click |
 
-On macOS, use `Cmd` instead of `Ctrl`. While typing text, `Enter` starts a new line and
-`Esc` finishes the text.
+On macOS, use `Cmd` instead of `Ctrl`.
 
-A pinned screenshot stays on top of other windows. Drag it to move it, zoom it with the mouse
-wheel or `+` and `-` (`0` goes back to 100 %), copy it again with `Ctrl+C`, save it with
-`Ctrl+S`, and close it with `Esc`, a double click or the middle mouse button.
+Every key, scrolling screenshots, video, the tray menu, settings, the command line and notes for each platform are in **[docs/USAGE.md](docs/USAGE.md)**.
 
-### Scrolling screenshots
+## Browser extension
 
-For a scrolling screenshot of a whole page, press `Ctrl+Shift+PrtSc` (`Cmd+Shift+0` on macOS)
-or pick **Scrolling screenshot of a page** in the tray menu, then click the browser window or
-select the part of the page to capture. In an open screenshot, `Ctrl+Shift+S` or the scroll
-button does the same for the selection (or the window under the mouse). Snapt goes to the top
-of the page, scrolls it down by itself and stops at the end; a panel next to the area shows the
-height so far, `Enter` or a click on it finishes early, and `Esc` cancels. The result is copied
-and pinned so you can check it and save it with `Ctrl+S`.
-
-Move the mouse to take over and scroll by hand; if the panel says you went too fast, scroll back
-up a little. Where Snapt can't turn the wheel itself (on Wayland, or on macOS until Snapt is
-allowed under *System Settings > Privacy & Security > Accessibility*), it asks you to scroll by
-hand. Sticky headers and footers appear once, but floating buttons and the scroll bar repeat
-down the image, so select the page without them for the cleanest result; pages that change as
-they scroll (animations, infinite feeds) may not glue.
-
-### Video and the tray menu
-
-To record a video, select an area and press `Ctrl+Shift+R` or the camera button. Snapt records
-10 frames a second, for up to two minutes; the panel shows the time. Press `Enter` or click
-the panel to stop and choose where to save it: MP4 if `ffmpeg` is on the `PATH`, GIF always.
-
-On Windows the tray menu is Snapt's own: icons next to every item, the shortcuts, the delays
-as buttons, and the update right inside, in the system's light or dark theme; arrow keys
-and `Enter` work too. On macOS and Linux it is the system menu with the same icons, since
-there the menu bar or the desktop draws tray menus itself.
-
-The tray menu also has:
-
-- **Scrolling screenshot of a page**: the same as `Ctrl+Shift+PrtSc` above;
-- **Copy full screen**: all monitors at once, straight to the clipboard;
-- **Repeat last area**: opens the screenshot with the area you selected last time;
-- **Screenshot with delay**: in 3, 5 or 10 seconds, to catch menus and tooltips;
-- **Recent screenshots**: the last 10, kept between restarts; click one to pin it. Set a
-  **Pin last screenshot** shortcut in the settings to pin the newest one from anywhere;
-- **Check for updates**: looks right away and shows the result in the menu, or offers
-  **Update to Snapt X.Y.Z** at the top when a new version is out.
-
-### Settings
-
-Pick **Settings…** in the tray menu. There you can:
-
-- switch the language: English, Russian or Ukrainian (it follows the system by default);
-- on **Shortcuts**, give every action its own keys: capture, color picker, full screen,
-  repeat last area, scrolling screenshot of a page, and copy text, scrolling screenshot,
-  recording, pin, copy and save on the open
-  screenshot. Click a field and press the keys; Backspace clears it. Snapt tells you when
-  the keys are already taken;
-- on **Features**, turn off text recognition, scrolling screenshots, pinning, image search,
-  printing, video recording or the color picker; their buttons and shortcuts go away;
-- on **Editor**, turn off any drawing tool, from the pen to blur, spotlight and crop; it
-  leaves the toolbar and its key stops working. Crop starts turned off;
-- let Snapt replace the system screenshot tool: on Windows, PrtSc and Win+Shift+S open Snapt
-  instead of the Snipping Tool, Snapt can be picked for the `ms-screenclip` and
-  `ms-screensketch` links (Windows asks you to confirm that one), and Snapt either asks first
-  or replaces it on its own; turning the option off gives everything back; on GNOME, the shortcut opens Snapt instead of GNOME Screenshot, on Wayland too; on
-  macOS and other desktops, the window explains the one manual step;
-- choose the screenshots folder and format, save without a dialog, also save what you copy,
-  open a file once it is saved, and start at login;
-- copy shots as an image or as a file, ready to paste straight into a folder in Explorer,
-  Finder or your file manager;
-- keep Snapt up to date: it checks GitHub Releases once a day and offers **Update** in the
-  tray and in the window. The Windows installer, the macOS app and the AppImage update
-  themselves; for the `.deb`, the download page opens.
-
-The settings are stored in a plain-text `settings.ini` in the config folder. Two more
-settings live only there: `history` sets how many recent screenshots to keep (0 keeps none),
-and `file_name` sets how saved files are named, with `strftime` codes such as `%Y` year,
-`%m` month, `%d` day, `%H` hour, `%M` minute and `%S` second. The default is
-`Snapt_%Y-%m-%d_%H-%M-%S`.
-
-### Command line
-
-`snapt --capture` takes a screenshot right away, `snapt --pick` opens the color picker and
-`snapt --settings` opens the settings.
-If Snapt is already running, that copy does it, so the command can be bound to a key in the
-system settings, for example on Wayland desktops without a global shortcuts portal.
-
-`snapt --logs` opens the folder with the log of the last run (`snapt.log`) and a
-`crash-<time>.txt` report for each crash. Attach them to a bug report.
+Snapt also comes as an extension for Chrome and Firefox: select an area, the visible part or the whole scrolling page, annotate it with the same tools, and copy or save it. It adds "Save image as PNG / JPG" to every image and an Alt+click viewer that zooms down to the pixel grid. Install it from [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/snapt-screenshots-images/). See [extension/README.md](extension/README.md).
 
 ## Building from source
 
@@ -227,51 +82,31 @@ cargo packager --release
 They land in `target/packages`. Pushing a `v*` tag builds them for all platforms in CI
 and publishes a GitHub Release.
 
-## Platform notes
-
-- **macOS:** the first capture asks for the Screen Recording permission in
-  System Settings → Privacy & Security. Restart Snapt after allowing it.
-- **Linux:** the tray icon uses the StatusNotifierItem protocol. KDE supports it out of
-  the box; on GNOME, install the AppIndicator extension. Text recognition uses Tesseract:
-  `sudo apt install tesseract-ocr tesseract-ocr-rus tesseract-ocr-ukr`.
-- **Wayland:** Snapt takes screenshots and gets its shortcut through the desktop portal
-  (xdg-desktop-portal). The first time, the desktop may ask you to allow screenshots and
-  to confirm the shortcut; you can change the key later in the desktop's keyboard
-  settings. Global shortcuts need a portal that has them, such as KDE Plasma 6 or
-  GNOME 48 and later. Elsewhere, bind `snapt --capture` to a key in the keyboard settings.
-- **Windows:** text recognition works for the languages added in Settings → Time & language
-  that include it.
-
 ## Contributing
 
-Bug reports and ideas are welcome in [Issues](https://github.com/vkardin/snapt/issues).
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build, test and send a pull request.
+Bug reports and ideas are welcome in [Issues](https://github.com/vkardin/snapt/issues). See [CONTRIBUTING.md](CONTRIBUTING.md) for how to build, test and send a pull request.
 
 ## Support
 
-Snapt is free and has no ads. If it saves you time, you can support development with crypto on the
-[website](https://vkardin.github.io/snapt/#donate).
+Snapt is free and has no ads. If it saves you time, you can say thanks on [Ko-fi](https://ko-fi.com/vkardin) or [Donatello](https://donatello.to/vkardin), or with crypto on the [website](https://vkardin.github.io/snapt/#donate).
 
 ## License
 
 [MIT](LICENSE) © vkardin
 
-Snapt bundles a subset of the [Inter](https://github.com/rsms/inter) typeface,
-licensed under the [SIL Open Font License](assets/fonts/OFL.txt).
+Snapt bundles a subset of the [Inter](https://github.com/rsms/inter) typeface, licensed under the [SIL Open Font License](assets/fonts/OFL.txt).
 
 <!-- project-family:start -->
+## More of my programs
 
-[**vkardin / tools — all projects ↗**](https://vkardin.github.io/)
-## More tools by vkardin
+All made by one person, free and open source. They live at [vkardin.github.io](https://vkardin.github.io/).
 
-| Project | Projects |
+| Program | What it does |
 | --- | --- |
-| **[Video Glow](https://vkardin.github.io/video-glow/)** | Ambient light around web videos. Soft glow, LED strips and room colour. [GitHub](https://github.com/vkardin/video-glow) |
-| **[Leveler](https://vkardin.github.io/leveler/)** | Even loudness, clearer dialogue, an equalizer and playback speed controls. [GitHub](https://github.com/vkardin/leveler) |
-| **[Video Drift](https://vkardin.github.io/video-drift/)** | Floating video with subtitles, saved playback positions and timestamped notes. [GitHub](https://github.com/vkardin/video-drift) |
-| **[UNI](https://vkardin.github.io/uni-homebot/)** | Your home server in Telegram: apps, monitoring, notifications and a Mini App. [GitHub](https://github.com/vkardin/uni-homebot) |
-| **[Коли Є](https://vkardin.github.io/koly/)** | Power outage schedules for every region of Ukraine: status now, a countdown, today and tomorrow. Windows widget. [GitHub](https://github.com/vkardin/koly) |
-| **[Tukk](https://vkardin.github.io/tukk/)** | Phone gestures for everyday actions: shake for the flashlight, flip for silence. Android, in development. [GitHub](https://github.com/vkardin/tukk) |
-
-[github.com/vkardin](https://github.com/vkardin) · Independent tools · open source
+| [Video Glow](https://vkardin.github.io/video-glow/) | Soft light around the video that follows the picture, like a backlight behind a TV. |
+| [Leveler](https://vkardin.github.io/leveler/) | Evens out the volume in films: you can hear the dialogue and the explosions don't blast. |
+| [Video Drift](https://vkardin.github.io/video-drift/) | Video in a small window on top of everything else. Remembers where you stopped. |
+| [UNI](https://vkardin.github.io/uni-homebot/) | Your home server at hand: apps, monitoring and notifications in Telegram. |
+| [Коли Є](https://vkardin.github.io/koly/) | Power outage schedules for every region of Ukraine, with a countdown until the power is back. |
+| [Tukk](https://vkardin.github.io/tukk/) | Shake the phone to turn on the flashlight. Flip it over for silence. In the works. |
 <!-- project-family:end -->
