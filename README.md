@@ -7,7 +7,7 @@
 Press PrtSc, select an area, add an arrow or a caption, then copy it or save it.<br>
 No accounts, no cloud, a few megabytes on disk.
 
-**[Website](https://vkardin.github.io/snapt/) ([RU](https://vkardin.github.io/snapt/ru/), [UA](https://vkardin.github.io/snapt/uk/)) · [Download](https://vkardin.github.io/snapt/#download) · [Firefox](https://addons.mozilla.org/firefox/addon/snapt-screenshots-images/) · [Report a bug](https://github.com/vkardin/snapt/issues)**
+**[Website](https://vkardin.github.io/snapt/) ([RU](https://vkardin.github.io/snapt/ru/), [UA](https://vkardin.github.io/snapt/uk/)) · [Download](https://vkardin.github.io/snapt/#download) · [Chrome](https://chromewebstore.google.com/detail/cgojajobdffefmabijahgncknakoegic) · [Firefox](https://addons.mozilla.org/firefox/addon/snapt-screenshots-images/) · [Report a bug](https://github.com/vkardin/snapt/issues)**
 
 [![CI](https://github.com/vkardin/snapt/actions/workflows/ci.yml/badge.svg)](https://github.com/vkardin/snapt/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-8B5CF6.svg)](LICENSE)
@@ -59,7 +59,8 @@ Planned: Flatpak and code-signed installers.
 Snapt also comes as an extension for Chrome and Firefox: select an area, the
 visible part or the whole scrolling page, annotate it with the same tools, and
 copy or save it. It adds "Save image as PNG / JPG" to every image and an
-Alt+click viewer that zooms down to the pixel grid. Install it from
+Alt+click viewer that zooms down to the pixel grid. Install it from the
+[Chrome Web Store](https://chromewebstore.google.com/detail/cgojajobdffefmabijahgncknakoegic) or
 [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/snapt-screenshots-images/). See
 [extension/README.md](extension/README.md).
 
@@ -271,6 +272,7 @@ licensed under the [SIL Open Font License](assets/fonts/OFL.txt).
 | **[Video Drift](https://vkardin.github.io/video-drift/)** | Floating video with subtitles, saved playback positions and timestamped notes. [GitHub](https://github.com/vkardin/video-drift) |
 | **[UNI](https://vkardin.github.io/uni-homebot/)** | Your home server in Telegram: apps, monitoring, notifications and a Mini App. [GitHub](https://github.com/vkardin/uni-homebot) |
 | **[Коли Є](https://vkardin.github.io/koly/)** | Power outage schedules for every region of Ukraine: status now, a countdown, today and tomorrow. Windows widget. [GitHub](https://github.com/vkardin/koly) |
+| **[BlackoutMode](https://vkardin.github.io/blackoutmode/)** | Keeps a laptop alive through power outages: cuts the draw, counts the time left on battery and power bank. Windows. [GitHub](https://github.com/vkardin/blackoutmode) |
 | **[Tukk](https://vkardin.github.io/tukk/)** | Phone gestures for everyday actions: shake for the flashlight, flip for silence. Android, in development. [GitHub](https://github.com/vkardin/tukk) |
 
 [github.com/vkardin](https://github.com/vkardin) · Independent tools · open source
